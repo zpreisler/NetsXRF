@@ -1,0 +1,27 @@
+#Yaml config file
+
+name: ResNet1
+data:
+        - /home/zdenek/Projects/XRF/ResNet/data/giulia_weighted_1024_with_labels.h5
+        - /home/zdenek/Projects/XRF/ResNet/data/rescaled12_giulia_weighted_1024_with_labels.h5
+        - /home/zdenek/Projects/XRF/ResNet/data/rescaled22_giulia_weighted_1024_with_labels.h5
+        - /home/zdenek/Projects/XRF/ResNet/data/rescaled23_giulia_weighted_1024_with_labels.h5
+        - /home/zdenek/Projects/XRF/ResNet/data/rescaled33_giulia_weighted_1024_with_labels.h5
+        - /home/zdenek/Projects/XRF/ResNet/data/rescaled44_giulia_weighted_1024_with_labels.h5
+
+eval_data:
+  - /home/zdenek/Projects/XRF/ResNet/data/selected7_elgreco_weighted_1024_with_labels.h5
+  - /home/zdenek/Projects/XRF/ResNet/data/selected6_giulia_weighted_1024_with_labels.h5
+
+num_threads: 8
+device: cuda
+
+model: ResNet1
+loss: L1Loss
+learning_rate: 0.0005
+batch_size: 128
+n_epochs: 64
+
+weights: True
+
+channels: 16
