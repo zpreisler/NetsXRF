@@ -14,6 +14,7 @@ from numpy import log,array,asarray,save,zeros,ones,vstack
 from argparse import ArgumentParser
 from pathlib import Path
 from glob import glob
+from time import time
 
 import h5py,yaml
 import gc
@@ -200,6 +201,8 @@ def main():
 
     loss_history = []
     test_loss_history = []
+
+    time0 = time()
     
     for epoch in range(current_epoch,config['n_epochs']):
         print('Epoch: %d/%d'%(epoch,config['n_epochs']))
@@ -268,7 +271,9 @@ def main():
             loss_history = asarray(loss_history)
             test_loss_history = asarray(test_loss_history)
 
+            m_time = time() - time0
             print(loss_history.mean(),test_loss_history.mean())
+            print('time:',m_time)
 
             torch.save({
                 'epoch': epoch,
@@ -277,7 +282,8 @@ def main():
                 'config': config,
                 'loss': loss_history,
                 'test_loss': test_loss_history,
-                'image': images},
+                'image': images,
+                'm_time': m_time},
                 path)
 
             loss_history = []
