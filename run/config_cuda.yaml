@@ -2,21 +2,21 @@
 
 name: ResNet1
 data:
-        - /shared/dataXRF/giulia_weighted_1024_with_labels.h5
-        - /shared/dataXRF/rescaled12_giulia_weighted_1024_with_labels.h5
-        - /shared/dataXRF/rescaled22_giulia_weighted_1024_with_labels.h5
-        - /shared/dataXRF/rescaled23_giulia_weighted_1024_with_labels.h5
-        - /shared/dataXRF/rescaled33_giulia_weighted_1024_with_labels.h5
-        - /shared/dataXRF/rescaled44_giulia_weighted_1024_with_labels.h5
-        - /shared/dataXRF/henryVIII_weighted_1024_with_labels.h5
-        - /shared/dataXRF/henryVII_2156_weighted_1024_with_labels.h5
-        - /shared/dataXRF/margaret_weighted_1024_with_labels.h5
-        - /shared/dataXRF/elisabeth_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/giulia_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/rescaled12_giulia_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/rescaled22_giulia_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/rescaled23_giulia_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/rescaled33_giulia_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/rescaled44_giulia_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/henryVIII_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/henryVII_2156_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/margaret_weighted_1024_with_labels.h5
+        - /home/shared/dataXRF/elisabeth_weighted_1024_with_labels.h5
 
 eval_data:
-  - /shared/dataXRF/downsample6_giulia_weighted_1024_with_labels.h5
-  - /shared/dataXRF/downsample6_elgreco_weighted_1024_with_labels.h5
-  - /shared/dataXRF/downsample9_henryVII_x1024_with_labels.h5
+  - /home/shared/dataXRF/downsample6_giulia_weighted_1024_with_labels.h5
+  - /home/shared/dataXRF/downsample6_elgreco_weighted_1024_with_labels.h5
+  - /home/shared/dataXRF/downsample9_henryVII_x1024_with_labels.h5
 
 num_threads: 8
 device: cuda
