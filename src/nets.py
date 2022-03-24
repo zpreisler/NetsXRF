@@ -171,12 +171,12 @@ class CNN1(nn.Module):
                 nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float)
         )
         self.fc = nn.Sequential(
-            nn.Linear(4096,5,dtype=torch.float),
+            nn.Linear(256 * channels,5,dtype=torch.float),
             nn.ReLU()
         )
         self.fc2 = nn.Sequential(
-            nn.Linear(4096,2048,dtype=torch.float),
-            nn.Linear(2048,5,dtype=torch.float),
+            nn.Linear(256 * channels,128 * channels,dtype=torch.float),
+            nn.Linear(128 * channels,5,dtype=torch.float),
             nn.ReLU()
         )
 
