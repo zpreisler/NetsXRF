@@ -22,11 +22,13 @@ num_threads: 8
 device: cuda
 
 model: ResNet1
-loss: L1Loss
+loss: MSELoss
+optimizer: Adam
 learning_rate: 0.0005
+momentum: 0.0
 batch_size: 128
-n_epochs: 64
+n_epochs: 128
 
 weights: True
 
-channels: 16
+channels: 8
