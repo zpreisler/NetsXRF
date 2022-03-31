@@ -30,7 +30,9 @@ def main():
     parser.add_argument('config_file')
     parser.add_argument('-n','--name',default=None)
     parser.add_argument('-l','--learning_rate',default=None,type=float)
+    parser.add_argument('-m','--momentum',default=0.0,type=float)
     parser.add_argument('-c','--channels',default=None,type=int)
+    parser.add_argument('-s','--epoch_size',default=32768,type=int)
 
     args = parser.parse_args()
 
@@ -169,7 +171,8 @@ def main():
 
     model = globals()[config['model']](channels = config['channels'])
 
-    optimizer = optim.SGD(model.parameters(), lr = config['learning_rate'])
+    #optimizer = optim.SGD(model.parameters(), lr = config['learning_rate'])
+    optimizer = getattr(optim,config['optimizer'])(model.parameters(), lr = config['learning_rate'])
     criterion = getattr(nn,config['loss'])(reduction = 'none')
 
     """

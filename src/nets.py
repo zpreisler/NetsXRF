@@ -96,17 +96,7 @@ class ResNet1(nn.Module):
     def forward(self,x):
         positive_x = x
         positive_x[x<=0] = 1
-        #mean = torch.mean(x,2)
-        #_mean = mean
-        #mean = mean.unsqueeze(1)
-        #std = torch.std(x,2)
-        #_std = std
-        #std = std.unsqueeze(1)
-        #mean = mean.expand(-1,1,1024)
-        #std = std.expand(-1,1,1024)
-        #print(std.shape,mean.shape,x.shape)
-        
-        #x = torch.cat([x,torch.log(positive_x),mean,std],axis=1)
+
         x = torch.cat([x,torch.log(positive_x)],axis=1)
         #print(x.shape)
         x = self.l0(x)
