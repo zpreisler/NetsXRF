@@ -195,3 +195,61 @@ class CNN1(nn.Module):
         z = z1 + z2
 
         return z
+
+class N_ElementCNN_1(nn.Module):
+    def __init__(self, channels=128, n_outputs=5):
+        super(N_ElementCNN_1, self).__init__()
+
+        self.n_channels_start = channels
+        self.n_outputs = n_outputs
+        self.kernel_size = 5
+
+        # LAYERS DECLARATION
+        # first layer
+        self.conv_0 = nn.Conv1d(in_channels=1, out_channels=self.n_channels_start, kernel_size=self.kernel_size, padding=int(self.kernel_size/2))
+        self.maxpool_1 = nn.MaxPool1d(kernel_size=5, stride=5) #reducing factor: 4
+        self.maxpool_2 = nn.MaxPool1d(kernel_size=8, stride=8) #reducing factor: 2
+        self.elu = nn.ELU()
+        self.relu = nn.ReLU()
+
+        # second layer
+        in_channels = self.conv_0.out_channels
+        self.conv_1 = nn.Conv1d(in_channels=in_channels, out_channels=in_channels*2, kernel_size=self.kernel_size, padding=int(self.kernel_size/2))
+        
+        # third layer
+        in_channels = self.conv_1.out_channels
+        self.conv_2 = nn.Conv1d(in_channels=in_channels, out_channels=in_channels*2, kernel_size=self.kernel_size, padding=int(self.kernel_size/2))
+        
+        # fourth layer
+        in_channels = self.conv_2.out_channels
+        self.conv_3 = nn.Conv1d(in_channels=in_channels, out_channels=in_channels*2, kernel_size=self.kernel_size, padding=int(self.kernel_size/2))
+        
+        # last layer
+        in_size = self.conv_3.out_channels
+        self.fc0 = nn.Linear(in_size, int(in_size/2))
+        in_size = self.fc0.out_features
+        self.fc1 = nn.Linear(in_size, self.n_outputs)
+
+    
+    def forward(self, data):
+        output0 = self.conv_0(data)
+        output0 = self.maxpool_1(output0)
+
+        output1 = self.conv_1(output0)
+        output1 = self.maxpool_1(output1)
+        output1 = self.elu(output1)
+
+        output2 = self.conv_2(output1)
+        output2 = self.maxpool_1(output2)
+        output2 = self.elu(output2)
+
+        output3 = self.conv_3(output2)
+        output3 = self.maxpool_1(output3)
+        output3 = self.elu(output3)
+        
+        output3 = torch.flatten(output3, start_dim=1)
+        output_fc = self.fc0(output3)
+        output_fc = self.fc1(output_fc)
+        # output_fc = self.fc2(output_fc)
+        output = self.relu(output_fc)
+        return output
