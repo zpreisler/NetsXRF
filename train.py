@@ -33,7 +33,6 @@ def main():
     parser.add_argument('-m','--momentum',default=0.0,type=float)
     parser.add_argument('-c','--channels',default=None,type=int)
     parser.add_argument('-s','--epoch_size',default=32768,type=int)
-    parser.add_argument('-p','--sample_loss',default=0,type=bool)
 
     args = parser.parse_args()
 
