@@ -5,7 +5,7 @@ from torch.utils.data import Dataset,DataLoader,WeightedRandomSampler
 
 from sklearn.model_selection import train_test_split
 
-from src.nets import ResNet1,CNN1
+from src.nets import ResNet1,CNN1,N_ElementCNN_1
 from src.dataset import SpectraDataset
 
 from XRDXRFutils import DataXRF
@@ -33,6 +33,7 @@ def main():
     parser.add_argument('-m','--momentum',default=0.0,type=float)
     parser.add_argument('-c','--channels',default=None,type=int)
     parser.add_argument('-s','--epoch_size',default=32768,type=int)
+    parser.add_argument('-p','--sample_loss',default=0,type=bool)
 
     args = parser.parse_args()
 
@@ -140,7 +141,7 @@ def main():
         print('No weights')
         train_weights = ones(len(train_data.data))
 
-    sampler = WeightedRandomSampler(train_weights,16384)
+    sampler = WeightedRandomSampler(train_weights, config['epoch_size'])
 
     train = DataLoader(train_dataset,
             batch_size = config['batch_size'],
