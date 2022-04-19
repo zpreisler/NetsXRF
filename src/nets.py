@@ -197,7 +197,7 @@ class CNN1(nn.Module):
         return z
 
 class N_ElementCNN_1(nn.Module):
-    def __init__(self, channels=128, n_outputs=5):
+    def __init__(self, channels=16, n_outputs=5):
         super(N_ElementCNN_1, self).__init__()
 
         self.n_channels_start = channels
