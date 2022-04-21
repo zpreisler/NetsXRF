@@ -32,6 +32,7 @@ def main():
     parser.add_argument('-l','--learning_rate',default=None,type=float)
     parser.add_argument('-m','--momentum',default=0.0,type=float)
     parser.add_argument('-c','--channels',default=None,type=int)
+    parser.add_argument('-k','--kernel_size',default=5,type=int)
     parser.add_argument('-s','--epoch_size',default=32768,type=int)
 
     args = parser.parse_args()
@@ -68,10 +69,9 @@ def main():
     train_weights = []
     test_weights = []
 
-    #dataXRF = DataXRF().load_h5(config['data'])
     print(config['data'])
     for file in config['data']:
-        print(file)
+        print('Reading:',file)
 
         dataXRF = DataXRF().load_h5(file)
 
@@ -104,7 +104,7 @@ def main():
         data = dataXRF.data
         labels = dataXRF.labels.astype(float)
 
-        print(labels.shape)
+        print("Eval:",file,labels.shape)
 
         data = torch.from_numpy(data).reshape(-1,1,data.shape[-1]).float()
         labels = torch.from_numpy(labels).reshape(-1,labels.shape[-1]).float()
@@ -129,18 +129,16 @@ def main():
     print('Train weights:',train_weights)
     print(train_weights.mean())
 
-    #train_data = SpectraDataset().load_h5(config['data'])
+    print("Labels means:",train_labels.mean(axis=0))
 
     train_dataset = SpectraDataset(train_data,train_labels)
     test_dataset = SpectraDataset(test_data,test_labels)
-
-    #print(weights.shape)
 
     if not config['weights']:
         print('No weights')
         train_weights = ones(len(train_data.data))
 
-    sampler = WeightedRandomSampler(train_weights,16384)
+    sampler = WeightedRandomSampler(train_weights,config['epoch_size'])
 
     train = DataLoader(train_dataset,
             batch_size = config['batch_size'],
@@ -200,7 +198,8 @@ def main():
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         current_epoch = checkpoint['epoch'] + 1
 
-    rescale = torch.Tensor([1.0,2.0,1.5,2.0,1.5]).to(device)
+    #rescale = torch.Tensor([460,215,200,70,35]).to(device)
+    rescale = torch.Tensor([2150,95,750,125,200]).to(device)
 
     loss_history = []
     test_loss_history = []
@@ -215,18 +214,16 @@ def main():
 
             data,labels = batch
 
-
             data = data.to(device)
             labels = labels.to(device)
 
             outputs = model(data)
 
-            loss = criterion(outputs,labels)
+            loss = criterion(outputs/rescale,labels/rescale)
             loss = loss.mean(0)
 
             loss_history += [loss.tolist()]
 
-            loss *= rescale
             loss = loss.mean()
 
             loss.backward()
@@ -243,7 +240,7 @@ def main():
 
             outputs = model(data)
 
-            loss = criterion(outputs,labels)
+            loss = criterion(outputs/rescale,labels/rescale)
             loss = loss.mean(0)
 
             test_loss_history += [loss.tolist()]

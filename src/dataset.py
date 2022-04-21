@@ -1,6 +1,5 @@
 import torch
 from torch.utils.data import Dataset
-
 import h5py
 
 class SpectraDataset(Dataset):
@@ -12,7 +11,6 @@ class SpectraDataset(Dataset):
         self.labels = labels
         
     def __getitem__(self,idx):
-        
         return self.data[idx],self.labels[idx]
     
     def __len__(self):
