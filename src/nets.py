@@ -46,17 +46,17 @@ class ResNet0(nn.Module):
         self.skip_3 = Skip(channels,1)
 
         self.fc2 = nn.Sequential(
-            nn.Linear(64,5,dtype=torch.float),
+            nn.Linear(64,6,dtype=torch.float),
             nn.ReLU()
         )
         self.fc3 = nn.Sequential(
             nn.Linear(64,32,dtype=torch.float),
-            nn.Linear(32,5,dtype=torch.float),
+            nn.Linear(32,6,dtype=torch.float),
             nn.ReLU()
         )
 
         self.fc = nn.Sequential(
-            nn.Linear(64,5),
+            nn.Linear(64,6),
         )
 
     def forward(self,x):
@@ -147,34 +147,38 @@ class CNN1(nn.Module):
         self.c0 = nn.Sequential(
                 self.conv_0,
                 #nn.BatchNorm1d(self.conv_0.out_channels,dtype=torch.float),
-                nn.ReLU(),
+                #nn.ReLU(),
+                nn.LeakyReLU(0.1),
                 nn.Conv1d(self.conv_0.out_channels,self.conv_0.out_channels,1,2,dtype=torch.float,bias=False)
         )
         self.c1 = nn.Sequential(
                 self.conv_1,
                 #nn.BatchNorm1d(self.conv_1.out_channels,dtype=torch.float),
-                nn.ReLU(),
+                #nn.ReLU(),
+                nn.LeakyReLU(0.1),
                 nn.Conv1d(self.conv_1.out_channels,self.conv_1.out_channels,1,2,dtype=torch.float,bias=False)
         )
         self.c2 = nn.Sequential(
                 self.conv_2,
                 #nn.BatchNorm1d(self.conv_2.out_channels,dtype=torch.float),
-                nn.ReLU(),
+                #nn.ReLU(),
+                nn.LeakyReLU(0.1),
                 nn.Conv1d(self.conv_2.out_channels,self.conv_2.out_channels,1,2,dtype=torch.float,bias=False)
         )
         self.c3 = nn.Sequential(
                 self.conv_3,
                 #nn.BatchNorm1d(self.conv_3.out_channels,dtype=torch.float),
                 nn.ReLU(),
+                #nn.LeakyReLU(0.1),
                 nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
         )
         self.fc = nn.Sequential(
-            nn.Linear(256 * channels,5,dtype=torch.float),
+            nn.Linear(256 * channels,6,dtype=torch.float),
             nn.ReLU()
         )
         self.fc2 = nn.Sequential(
             nn.Linear(256 * channels,128 * channels,dtype=torch.float),
-            nn.Linear(128 * channels,5,dtype=torch.float),
+            nn.Linear(128 * channels,6,dtype=torch.float),
             nn.ReLU()
         )
 
