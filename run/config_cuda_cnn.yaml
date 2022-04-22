@@ -1,0 +1,33 @@
+#Yaml config file
+
+name: CNN2
+data:
+        - /home/shared/AIdataXRF/giulia_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/rescaled12_giulia_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/rescaled22_giulia_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/rescaled23_giulia_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/rescaled33_giulia_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/rescaled44_giulia_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/henryVIII_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/henryVII_2156_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/margaret_weighted_1024_with_labels.h5
+        - /home/shared/AIdataXRF/elisabeth_weighted_1024_with_labels.h5
+
+eval_data:
+  - /home/shared/AIdataXRF/downsample6_giulia_weighted_1024_with_labels.h5
+  - /home/shared/AIdataXRF/downsample6_elgreco_weighted_1024_with_labels.h5
+  - /home/shared/AIdataXRF/downsample9_henryVII_x1024_with_labels.h5
+
+num_threads: 8
+device: cuda
+
+model: CNN2
+loss: L1Loss
+learning_rate: 0.0005
+batch_size: 256
+n_epochs: 64
+optimizer: Adam
+
+weights: True
+
+channels: 8

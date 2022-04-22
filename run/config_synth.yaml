@@ -1,0 +1,30 @@
+#Yaml config file
+
+name: CNN1_synth_L1_6_6_7
+data:
+        - /home/shared/AIdataXRF/el_synthetic6.h5
+        - /home/shared/AIdataXRF/synthetic6.h5
+        - /home/shared/AIdataXRF/el_synthetic_Au6.h5
+        - /home/shared/AIdataXRF/el_synthetic_thick6.h5
+
+eval_data:
+  - /home/shared/AIdataXRF/downsample6_giulia_1024_with_labels6.h5
+  - /home/shared/AIdataXRF/downsample7_elgreco_weighted_1024_with_labels6.h5
+  - /home/shared/AIdataXRF/downsample9_henryVII_x1024_with_labels6.h5
+
+num_threads: 2
+device: cuda
+
+model: CNN1
+loss: L1Loss
+optimizer: Adam
+learning_rate: 0.000025
+momentum: 0.99
+batch_size: 256
+n_epochs: 256
+epoch_size: 65536
+
+weights: True
+
+channels: 6
+kernel_size: 5
