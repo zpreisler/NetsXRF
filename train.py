@@ -5,7 +5,7 @@ from torch.utils.data import Dataset,DataLoader,WeightedRandomSampler
 
 from sklearn.model_selection import train_test_split
 
-from src.nets import ResNet1,CNN1
+from src.nets import ResNet1,CNN1,CNN2
 from src.dataset import SpectraDataset
 
 from XRDXRFutils import DataXRF
@@ -32,7 +32,7 @@ def main():
     parser.add_argument('-l','--learning_rate',default=None,type=float)
     parser.add_argument('-m','--momentum',default=0.0,type=float)
     parser.add_argument('-c','--channels',default=None,type=int)
-    parser.add_argument('-k','--kernel_size',default=5,type=int)
+    parser.add_argument('-k','--kernel_size',default=None,type=int)
     parser.add_argument('-s','--epoch_size',default=32768,type=int)
 
     args = parser.parse_args()

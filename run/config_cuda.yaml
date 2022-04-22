@@ -1,6 +1,6 @@
 #Yaml config file
 
-name: ResNet1
+name: CNN1
 data:
         - /home/shared/AIdataXRF/giulia_weighted_1024_with_labels.h5
         - /home/shared/AIdataXRF/rescaled12_giulia_weighted_1024_with_labels.h5
@@ -21,14 +21,14 @@ eval_data:
 num_threads: 2
 device: cuda
 
-model: ResNet1
-loss: MSELoss
+model: CNN1
+loss: L1Loss
 optimizer: Adam
 learning_rate: 0.0005
-momentum: 0.0
-batch_size: 128
+momentum: 0.95
+batch_size: 256
 n_epochs: 128
 
 weights: True
 
-channels: 8
+channels: 6
