@@ -30,10 +30,10 @@ def main():
     parser.add_argument('config_file')
     parser.add_argument('-n','--name',default=None)
     parser.add_argument('-l','--learning_rate',default=None,type=float)
-    parser.add_argument('-m','--momentum',default=0.0,type=float)
+    parser.add_argument('-m','--momentum',default=None,type=float)
     parser.add_argument('-c','--channels',default=None,type=int)
-    parser.add_argument('-k','--kernel_size',default=5,type=int)
-    parser.add_argument('-s','--epoch_size',default=32768,type=int)
+    parser.add_argument('-k','--kernel_size',default=None,type=int)
+    parser.add_argument('-s','--epoch_size',default=None,type=int)
 
     args = parser.parse_args()
 
@@ -202,7 +202,8 @@ def main():
 
     #rescale = torch.Tensor([2.5,1.0,1.0,0.5,0.25]).to(device)
     #rescale = torch.Tensor([460,215,200,70,35]).to(device)
-    rescale = torch.Tensor([700,215,220,70,55,20]).to(device)
+    #rescale = torch.Tensor([700,215,220,70,55,20]).to(device)
+    rescale = torch.Tensor([830,240,295,75,70,180]).to(device)
 
     loss_history = []
     test_loss_history = []
@@ -221,9 +222,9 @@ def main():
             labels = labels.to(device)
 
             #rnd = (torch.rand(data.shape[0]) * 4 + 1).to(device)
-            #rnd = (torch.randint(1,3,(data.shape[0],1))).to(device)
-            #data *= rnd.reshape(-1,1,1)
-            #labels *= rnd.reshape(-1,1)
+            rnd = (torch.randint(1,3,(data.shape[0],1))).to(device) * 0.5
+            data *= rnd.reshape(-1,1,1)
+            labels *= rnd.reshape(-1,1)
 
             data = torch.poisson(data)
 
@@ -248,9 +249,9 @@ def main():
             data = data.to(device)
             labels = labels.to(device)
 
-            rnd = (torch.randint(1,10,(data.shape[0],1))).to(device)
-            data *= rnd.reshape(-1,1,1)
-            labels *= rnd.reshape(-1,1)
+            #rnd = (torch.randint(1,10,(data.shape[0],1))).to(device)
+            #data *= rnd.reshape(-1,1,1)
+            #labels *= rnd.reshape(-1,1)
 
             outputs = model(data)
 
