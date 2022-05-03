@@ -203,7 +203,7 @@ def main():
     #rescale = torch.Tensor([2.5,1.0,1.0,0.5,0.25]).to(device)
     #rescale = torch.Tensor([460,215,200,70,35]).to(device)
     #rescale = torch.Tensor([700,215,220,70,55,20]).to(device)
-    rescale = torch.Tensor([830,240,295,75,70,180]).to(device)
+    rescale = torch.Tensor([830,240,295,75,130,180]).to(device)
 
     loss_history = []
     test_loss_history = []
@@ -222,7 +222,7 @@ def main():
             labels = labels.to(device)
 
             #rnd = (torch.rand(data.shape[0]) * 4 + 1).to(device)
-            rnd = (torch.randint(1,3,(data.shape[0],1))).to(device) * 0.5
+            rnd = (torch.randint(1,5,(data.shape[0],1))).to(device)
             data *= rnd.reshape(-1,1,1)
             labels *= rnd.reshape(-1,1)
 

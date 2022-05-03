@@ -1,10 +1,11 @@
 #Yaml config file
 
-name: CNN1_synth_L1_6_6_7
+name: CNN1_synth_L1_6_Sr_2
 data:
         - /home/shared/AIdataXRF/el_synthetic6.h5
         - /home/shared/AIdataXRF/synthetic6.h5
         - /home/shared/AIdataXRF/el_synthetic_Au6.h5
+        - /home/shared/AIdataXRF/el_synthetic_Sr6.h5
         - /home/shared/AIdataXRF/el_synthetic_thick6.h5
 
 eval_data:

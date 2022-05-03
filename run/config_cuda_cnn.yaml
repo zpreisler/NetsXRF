@@ -25,7 +25,7 @@ model: CNN2
 loss: L1Loss
 learning_rate: 0.0005
 batch_size: 256
-n_epochs: 64
+n_epochs: 256
 optimizer: Adam
 
 weights: True
