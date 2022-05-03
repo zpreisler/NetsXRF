@@ -210,7 +210,7 @@ class CNN1(nn.Module):
 
 class CNN2(nn.Module):
 
-    def __init__(self,channels = 16, kernel_size = 5):
+    def __init__(self,channels = 16, kernel_size = 5, n_outputs=5):
         super().__init__()
 
         self.conv_0 = nn.Conv1d(in_channels=1, out_channels=channels,
@@ -259,7 +259,7 @@ class CNN2(nn.Module):
         )
         self.fc2 = nn.Sequential(
             nn.Linear(256 * channels,128 * channels,dtype=torch.float),
-            nn.Linear(128 * channels,5,dtype=torch.float),
+            nn.Linear(128 * channels,n_outputs,dtype=torch.float),
             nn.ReLU()
         )
 
