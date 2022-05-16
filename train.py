@@ -6,7 +6,7 @@ from torch.utils.data import Dataset,DataLoader,WeightedRandomSampler
 from sklearn.model_selection import train_test_split
 
 from src.nets import ResNet1,CNN1,CNN2
-from src.dataset import SpectraDataset
+from src.dataset import SpectraDataset, SynthSpectraDataset
 
 from XRDXRFutils import DataXRF
 
@@ -74,6 +74,8 @@ def main():
         print('Reading:',file)
 
         dataXRF = DataXRF().load_h5(file)
+        dataXRF = dataXRF.select_labels(config['labels'])
+        print('labels shape:', dataXRF.labels.shape)
 
         data = dataXRF.data.astype(float)
         labels = dataXRF.labels.astype(float)
@@ -100,6 +102,8 @@ def main():
     eval_datasets = []
     for file in config['eval_data']:
         dataXRF = DataXRF().load_h5(file)
+        dataXRF = dataXRF.select_labels(config['labels'])
+        print('labels shape:', dataXRF.labels.shape)
 
         data = dataXRF.data
         labels = dataXRF.labels.astype(float)
@@ -167,7 +171,7 @@ def main():
     Define model
     """
 
-    model = globals()[config['model']](channels = config['channels'])
+    model = globals()[config['model']](channels = config['channels'], n_outputs=len(config['labels']))
 
     #optimizer = optim.SGD(model.parameters(), lr = config['learning_rate'])
     optimizer = getattr(optim,config['optimizer'])(model.parameters(), lr = config['learning_rate'])
@@ -199,7 +203,9 @@ def main():
         current_epoch = checkpoint['epoch'] + 1
 
     #rescale = torch.Tensor([460,215,200,70,35]).to(device)
-    rescale = torch.Tensor([2150,95,750,125,200]).to(device)
+    # rescale = torch.Tensor([2150,95,750,125,200]).to(device)
+    # 214.7656,  523.0945,   47.7345, 1370.7889,  650.1573,   43.8938 462.8920, 4626.4932,   88.0352
+    rescale = torch.Tensor([681, 207, 118, 521, 526, 469, 429, 194, 312, 581]).to(device)
 
     loss_history = []
     test_loss_history = []
@@ -225,6 +231,7 @@ def main():
             loss_history += [loss.tolist()]
 
             loss = loss.mean()
+            print('loss:', loss, end='\r')
 
             loss.backward()
             optimizer.step()
@@ -260,7 +267,7 @@ def main():
                 image += [outputs.cpu().detach().numpy()]
 
             image = vstack(image)
-            print(image.shape)
+            print('\n',image.shape)
             image = image.reshape(evaluate.shape)
             images += [image]
 
