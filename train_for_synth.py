@@ -5,7 +5,7 @@ from torch.utils.data import Dataset,DataLoader,WeightedRandomSampler
 
 from sklearn.model_selection import train_test_split
 
-from src.nets import ResNet1,CNN1,CNN2
+from src.nets import ResNet0,CNN1,CNN2
 from src.dataset import SpectraDataset, SynthSpectraDataset
 
 from XRDXRFutils import DataXRF, SyntheticDataXRF
@@ -71,6 +71,8 @@ def main():
         print('Reading:',file)
 
         dataXRF = SyntheticDataXRF().load_h5(file)
+        print('selected labels:',dataXRF.metadata['labels'], len(dataXRF.metadata['labels']))
+        
         dataXRF = dataXRF.select_labels(config['labels'])
         print('labels shape:', dataXRF.labels.shape)
 
@@ -82,7 +84,7 @@ def main():
 
         print(data.shape,labels.shape)
 
-        _train_data,_test_data, _train_labels,_test_labels = train_test_split(data,labels,test_size = 3000,random_state = 93719)
+        _train_data, _test_data, _train_labels, _test_labels = train_test_split(data,labels,test_size = 1100,random_state = 93719)
 
         train_data += [_train_data]
         test_data += [_test_data]
@@ -184,7 +186,9 @@ def main():
         current_epoch = checkpoint['epoch'] + 1
 
     #rescale = torch.Tensor([460,215,200,70,35]).to(device)
-    rescale = torch.Tensor([1112,  276,  145,  708,  700,  638, 584,  250,  326,  679]).to(device)
+    # rescale = torch.Tensor([182.2652, 307.7705, 179.8532, 740.2400, 772.9026, 752.8382, 714.0045, 311.4732, 366.1621, 894.7768]).to(device)
+    rescale = torch.Tensor([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]).to(device)
+
 
     loss_history = []
     test_loss_history = []
@@ -192,7 +196,7 @@ def main():
     time0 = time()
     
     for epoch in range(current_epoch,config['n_epochs']):
-        print('Epoch: %d/%d'%(epoch,config['n_epochs']))
+        print('\nEpoch: %d/%d'%(epoch,config['n_epochs']))
 
         model.train()
         for i,batch in enumerate(train):
@@ -216,42 +220,43 @@ def main():
             optimizer.step()
             optimizer.zero_grad()
 
-        model.eval()
-        for i,batch in enumerate(test):
+        # model.eval()
+        # for i,batch in enumerate(test):
 
-            data,labels = batch
+        #     data,labels = batch
 
-            data = data.to(device)
-            labels = labels.to(device)
+        #     data = data.to(device)
+        #     labels = labels.to(device)
 
-            outputs = model(data)
+        #     outputs = model(data)
 
-            loss = criterion(outputs/rescale,labels/rescale)
-            loss = loss.mean(0)
+        #     loss = criterion(outputs/rescale,labels/rescale)
+        #     loss = loss.mean(0)
 
-            test_loss_history += [loss.tolist()]
+        #     test_loss_history += [loss.tolist()]
 
-        images = []
-        for evaluate in evals:
-            image = []
+        # images = []
+        # for evaluate in evals:
+        #     image = []
 
-            for i,batch in enumerate(evaluate):
+        #     for i,batch in enumerate(evaluate):
 
-                data,labels = batch
+        #         data,labels = batch
 
-                data = data.to(device)
-                labels = labels.to(device)
+        #         data = data.to(device)
+        #         labels = labels.to(device)
 
-                outputs = model(data)
-                image += [outputs.cpu().detach().numpy()]
+        #         outputs = model(data)
+        #         image += [outputs.cpu().detach().numpy()]
 
-            image = vstack(image)
-            print('\n',image.shape)
-            image = image.reshape(evaluate.shape)
-            images += [image]
+        #     image = vstack(image)
+        #     print('\n',image.shape)
+        #     image = image.reshape(evaluate.shape)
+        #     images += [image]
 
-        if epoch % 25 == 0 or epoch==int(config['n_epochs'])-1:
+        if epoch % 10 == 0 or epoch==int(config['n_epochs'])-1:
 
+            print()
             path = config['name'] + '/%04d.pth'%epoch
             print('Saving:',path)
             loss_history = asarray(loss_history)
