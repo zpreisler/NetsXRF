@@ -46,12 +46,12 @@ class ResNet0(nn.Module):
         self.skip_3 = Skip(channels,1)
 
         self.fc2 = nn.Sequential(
-            nn.Linear(64,n_outputs,dtype=torch.float),
+            nn.Linear(64,n_outputs),
             nn.ReLU()
         )
         self.fc3 = nn.Sequential(
-            nn.Linear(64,32,dtype=torch.float),
-            nn.Linear(32,n_outputs,dtype=torch.float),
+            nn.Linear(64,32),
+            nn.Linear(32,n_outputs),
             nn.ReLU()
         )
 
