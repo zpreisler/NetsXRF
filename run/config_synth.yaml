@@ -2,11 +2,17 @@
 
 name: CNN2
 data:
-        - F:/andrea/AIdataXRF/synthetic_data/synth_general_1_90_1024.h5
-        - F:/andrea/AIdataXRF/synthetic_data/synth_general_1_30_1024.h5
-        - F:/andrea/AIdataXRF/synthetic_data/synth_general_30_90_1024.h5
-        - F:/andrea/AIdataXRF/synthetic_data/synth_general_ubound07_1024.h5
-        - F:/andrea/AIdataXRF/synthetic_data/synth_sampled_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/MoSiO2_slfixed_rl_1_90_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/MoSiO2_slfixed_rl_1_50_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/SiO2_new_template_rl_1_50_data_1024.h5
+        - F:/andrea/AIdataXRF/synthetic_data/SiO2_new_template_rl_1_50_data_corrected_1024.h5
+
+        # - F:/andrea/AIdataXRF/synthetic_data/synth_general_1_90_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/synth_general_1_30_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/synth_general_30_90_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/synth_general_ubound07_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/single_layer_Mo_140_160_egizio_1024.h5
+        # - F:/andrea/AIdataXRF/synthetic_data/synth_sampled_1024.h5
 
 eval_data:
  - F:/andrea/AIdataXRF/base/ElGrecoAnalysis_downsample66_weighted_x1024_with_labels.h5
@@ -18,36 +24,106 @@ num_threads: 2
 device: cuda
 
 labels: 
+  # - 'Pb-L'
+  # - 'Au-L'
+  # - 'Ca-K'
+  # - 'Co-K'
+  # - 'Cu-K'
+  # - 'Fe-K'
+  # - 'Mn-K'
+  # - 'Hg-L'
+  # - 'Ti-K'
+  # - 'Zn-K'
+  
   - 'Pb-L'
-  - 'Au-L'
-  - 'Ca-K'
-  - 'Co-K'
-  - 'Cu-K'
   - 'Fe-K'
   - 'Mn-K'
-  - 'Hg-L'
+  - 'Cu-K'
+  - 'Co-K'
+  - 'Ca-K'
   - 'Ti-K'
-  - 'Zn-K'
+  - 'S-K'
+  - 'P-K'
+  # - 'Cr-K'
+  - 'Au-L'
+  - 'Al-K'
+  - 'Si-K'
+  - 'Cl-K'
+  - 'Sb-L'
+  - 'Sn-L'
+  - 'Sr-K'
+  - 'V-K'
+  # - 'Zn-K'
+  # - 'Cd-K'
+  # - 'K-K'
+  # - 'Ba-L'
+  # - 'As-K'
+  # - 'Hg-L'
+  # - 'Se-K'
+  # - 'Br-K'
+  # - 'Bi-L'
+  # - 'Ni-K'
+  # - 'Ag-K'
+
 
 model: CNN2
 loss: L1Loss
 optimizer: Adam
-learning_rate: 0.000025
+learning_rate: 0.025
 momentum: 0.99
 batch_size: 256
-n_epochs: 512
+n_epochs: 400
 epoch_size: 65536
 
-channels: 6
+channels: 8
 kernel_size: 5
 
 scales: 
-  - 
-  # - 0.8
-#   - 1
-#   - 1.1
-#   - 1.2
-#   - 1.4
-#   - 1.5
-#   - 1.7
-#   - 1.75 
+  # - 0.01
+  # - 0.02
+  # - 0.03
+  # - 0.04
+  # - 0.05
+  # - 0.06
+  # - 0.07
+  # - 0.08
+  # - 0.09
+  # - 0.1
+  # - 0.15
+  # - 0.2
+  # - 0.25
+  # - 0.3
+  # - 0.35
+  # - 0.4
+
+
+  # # - 0.1
+  # - 0.2
+  # - 0.3
+  # - 0.4
+  # # - 0.5
+  - 1.0
+  # # # - 1.1
+  # # # - 1.2
+  # # # - 1.3
+  # # # - 1.4
+  # - 1.5
+  # # # - 1.6
+  # # # - 1.7
+  # # # - 1.8
+  # # - 1.9
+
+  # - 1.0
+  # - 5.0
+  # - 15
+  # - 20
+  # - 25
+  # - 30
+  # - 35
+
+  # - 0.1
+  # - 1
+  # - 10
+  # - 50
+  # # - 5
+  # - 100
