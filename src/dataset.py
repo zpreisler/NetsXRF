@@ -21,9 +21,13 @@ class SynthSpectraDataset(Dataset):
     
     def __init__(self,data,labels,scales=[None]):
         super().__init__()
-        if scales ==[None]:self.scales = [0.1,0.2,0.3,0.4,0.5,0.6,0.65,0.7,0.75,0.8,0.9,1.0,1.1]
-        else:self.scales = scales
+        if scales ==[None]:
+            print('Scales default')
+            self.scales = np.arange(0.1, 1.2, 0.1)
+        else:
+            self.scales = scales
 
+        print('Scales:', self.scales)
         self.data = data
         self.labels = labels
         
