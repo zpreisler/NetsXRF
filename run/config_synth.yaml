@@ -1,31 +1,57 @@
 #Yaml config file
 
-name: CNN1_synth_L1_6_Sr_2
+name: CNN3_synth_no_00_Pb_7_11
+
 data:
-        - /home/shared/AIdataXRF/el_synthetic6.h5
-        - /home/shared/AIdataXRF/synthetic6.h5
-        - /home/shared/AIdataXRF/el_synthetic_Au6.h5
-        - /home/shared/AIdataXRF/el_synthetic_Sr6.h5
-        - /home/shared/AIdataXRF/el_synthetic_thick6.h5
+  #- /home/shared/AIdataXRF/synth_general_01_5_1024.h5
+  #- /home/shared/AIdataXRF/synth_general_1_30_1024.h5
+  #     - /home/shared/AIdataXRF/synth_general_1_90_1024.h5
+  - /home/shared/AIdataXRF/synth_general_30_90_1024.h5
+  #- /home/shared/AIdataXRF/synth_general_ubound07_1024.h5
+  #- /home/shared/AIdataXRF/synth_sampled_1024.h5
+  #- /home/shared/AIdataXRF/slfixed_Pb_u7_rl_05_90_1024.h5
+  - /home/shared/AIdataXRF/slfixed_Pb_rl_05_90_1024.h5
+  #- /home/shared/AIdataXRF/slfixed_Pb_rl_05_90_1024.h5
+  #- /home/shared/AIdataXRF/slfixed_Pb_rl_05_90_1024.h5
+  #- /home/shared/AIdataXRF/slfixed_Pb_rl_05_90_1024.h5
 
 eval_data:
   - /home/shared/AIdataXRF/downsample6_giulia_1024_with_labels6.h5
-  - /home/shared/AIdataXRF/downsample7_elgreco_weighted_1024_with_labels6.h5
+  - /home/shared/AIdataXRF/downsample7_elgreco_1024_with_labels.h5
   - /home/shared/AIdataXRF/downsample9_henryVII_x1024_with_labels6.h5
+
+labels:
+  - Pb-L 
+  - Fe-K 
+  - Mn-K
+  - Cu-K
+  - Zn-K
+  - Co-K
+  - Cd-K
+  - K-K
+  - Ca-K
+  - Ba-L
+  - Ti-K
+  - As-K
+  - Hg-L
+  - S-K
+  - P-K
+  - Cr-K
+  - Au-L
 
 num_threads: 2
 device: cuda
 
-model: CNN1
+model: CNN3
 loss: L1Loss
 optimizer: Adam
-learning_rate: 0.000025
+learning_rate: 0.00007
 momentum: 0.99
 batch_size: 256
-n_epochs: 256
-epoch_size: 65536
+n_epochs: 512
+epoch_size: 131072
 
-weights: True
+weights: False
 
-channels: 6
+channels: 11
 kernel_size: 5

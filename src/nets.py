@@ -173,12 +173,12 @@ class CNN1(nn.Module):
                 nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
         )
         self.fc = nn.Sequential(
-            nn.Linear(256 * channels,6,dtype=torch.float),
+            nn.Linear(256 * channels,18,dtype=torch.float),
             nn.ReLU()
         )
         self.fc2 = nn.Sequential(
             nn.Linear(256 * channels,128 * channels,dtype=torch.float),
-            nn.Linear(128 * channels,6,dtype=torch.float),
+            nn.Linear(128 * channels,18,dtype=torch.float),
             nn.ReLU()
         )
 
@@ -227,49 +227,31 @@ class CNN2(nn.Module):
 
         self.c0 = nn.Sequential(
                 self.conv_0,
-                #nn.BatchNorm1d(self.conv_0.out_channels,dtype=torch.float),
-                #nn.ReLU(),
-                nn.LeakyReLU(0.1),
+                nn.LeakyReLU(0.2),
                 nn.Conv1d(self.conv_0.out_channels,self.conv_0.out_channels,1,2,dtype=torch.float,bias=False)
         )
         self.c1 = nn.Sequential(
                 self.conv_1,
-                #nn.BatchNorm1d(self.conv_1.out_channels,dtype=torch.float),
-                #nn.ReLU(),
-                nn.LeakyReLU(0.1),
+                nn.LeakyReLU(0.3),
                 nn.Conv1d(self.conv_1.out_channels,self.conv_1.out_channels,1,2,dtype=torch.float,bias=False)
         )
         self.c2 = nn.Sequential(
                 self.conv_2,
-                #nn.BatchNorm1d(self.conv_2.out_channels,dtype=torch.float),
-                #nn.ReLU(),
                 nn.LeakyReLU(0.1),
                 nn.Conv1d(self.conv_2.out_channels,self.conv_2.out_channels,1,2,dtype=torch.float,bias=False)
         )
         self.c3 = nn.Sequential(
                 self.conv_3,
-                #nn.BatchNorm1d(self.conv_3.out_channels,dtype=torch.float),
                 nn.ReLU(),
-                #nn.LeakyReLU(0.1),
                 nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
         )
         self.fc = nn.Sequential(
-            nn.Linear(256 * channels,5,dtype=torch.float),
-            nn.ReLU()
+            nn.Linear(256 * channels,18,dtype=torch.float),
         )
-        self.fc2 = nn.Sequential(
-            nn.Linear(256 * channels,128 * channels,dtype=torch.float),
-            nn.Linear(128 * channels,5,dtype=torch.float),
-            nn.ReLU()
-        )
+
+        self.m = nn.Parameter(torch.ones(18))
 
     def forward(self,x):
-
-        positive_x = x
-        #positive_x[x<=0] = 1
-
-        #x = torch.cat([x,torch.log(positive_x)],axis=1)
-        #print("Xshape",x.shape)
 
         x = self.c0(x)
         #print(x.shape)
@@ -283,8 +265,281 @@ class CNN2(nn.Module):
         z = x.flatten(1)
 
         z1 = self.fc(z)
-        z2 = self.fc2(z)
-
-        z = z1 + z2
+        z = z1 * self.m
 
         return z
+
+
+
+class CNN3(nn.Module):
+
+    def __init__(self,channels = 16, kernel_size = 5):
+        super().__init__()
+
+        self.conv_0 = nn.Conv1d(in_channels=1, out_channels=channels,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_1 = nn.Conv1d(in_channels=self.conv_0.out_channels, out_channels=self.conv_0.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_2 = nn.Conv1d(in_channels=self.conv_1.out_channels, out_channels=self.conv_1.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_3 = nn.Conv1d(in_channels=self.conv_2.out_channels, out_channels=self.conv_2.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.c0 = nn.Sequential(
+                self.conv_0,
+                #nn.BatchNorm1d(self.conv_0.out_channels,dtype=torch.float),
+                nn.ReLU(),
+                #nn.LeakyReLU(0.3),
+                nn.MaxPool1d(2,2)
+                #nn.Conv1d(self.conv_0.out_channels,self.conv_0.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c1 = nn.Sequential(
+                self.conv_1,
+                #nn.BatchNorm1d(self.conv_1.out_channels,dtype=torch.float),
+                nn.ReLU(),
+                #nn.LeakyReLU(0.2),
+                nn.MaxPool1d(2,2)
+                #nn.Conv1d(self.conv_1.out_channels,self.conv_1.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c2 = nn.Sequential(
+                self.conv_2,
+                #nn.BatchNorm1d(self.conv_2.out_channels,dtype=torch.float),
+                nn.ReLU(),
+                #nn.LeakyReLU(0.1),
+                nn.MaxPool1d(2,2)
+                #nn.Conv1d(self.conv_2.out_channels,self.conv_2.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c3 = nn.Sequential(
+                self.conv_3,
+                #nn.BatchNorm1d(self.conv_3.out_channels,dtype=torch.float),
+                #nn.ReLU(),
+                #nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
+                #nn.MaxPool1d(2,2)
+                nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(256 * channels,31,dtype=torch.float,bias=False),
+        )
+
+        self.m = nn.Parameter(torch.ones(31,dtype=torch.float))
+        self.b = nn.Parameter(torch.ones(31,dtype=torch.float))
+
+    def forward(self,x):
+
+        x = self.c0(x)
+        x = self.c1(x)
+        x = self.c2(x)
+        x = self.c3(x)
+        #print(x.shape)
+
+        z = x.flatten(1)
+        z1 = self.fc(z)
+
+        z = self.b + (z1) * self.m
+
+        return z
+
+class CNN_max_pool(nn.Module):
+
+    def __init__(self,channels = 16, kernel_size = 5):
+        super().__init__()
+
+        self.conv_0 = nn.Conv1d(in_channels=1, out_channels=channels,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_1 = nn.Conv1d(in_channels=self.conv_0.out_channels, out_channels=self.conv_0.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_2 = nn.Conv1d(in_channels=self.conv_1.out_channels, out_channels=self.conv_1.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_3 = nn.Conv1d(in_channels=self.conv_2.out_channels, out_channels=self.conv_2.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.c0 = nn.Sequential(
+                self.conv_0,
+                nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_0.out_channels,self.conv_0.out_channels,1,2,dtype=torch.float,bias=False)
+                nn.MaxPool1d(2,2)
+        )
+        self.c1 = nn.Sequential(
+                self.conv_1,
+                nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_1.out_channels,self.conv_1.out_channels,1,2,dtype=torch.float,bias=False)
+                nn.MaxPool1d(2,2)
+        )
+        self.c2 = nn.Sequential(
+                self.conv_2,
+                nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_2.out_channels,self.conv_2.out_channels,1,2,dtype=torch.float,bias=False)
+                nn.MaxPool1d(2,2)
+        )
+        self.c3 = nn.Sequential(
+                self.conv_3,
+                #nn.ReLU(),
+                nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(256 * channels,18,dtype=torch.float),
+        )
+
+        self.m = nn.Parameter(torch.ones(18))
+
+    def forward(self,x):
+
+        x = self.c0(x)
+        #print(x.shape)
+        x = self.c1(x)
+        #print(x.shape)
+        x = self.c2(x)
+        #print(x.shape)
+        x = self.c3(x)
+        #print(x.shape)
+
+        z = x.flatten(1)
+
+        z1 = self.fc(z)
+        z = z1 * self.m 
+
+        return z
+
+class CNN_max_pool_b(nn.Module):
+
+    def __init__(self,channels = 16, kernel_size = 5):
+        super().__init__()
+
+        self.conv_0 = nn.Conv1d(in_channels=1, out_channels=channels,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=True)
+
+        self.conv_1 = nn.Conv1d(in_channels=self.conv_0.out_channels, out_channels=self.conv_0.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=True)
+
+        self.conv_2 = nn.Conv1d(in_channels=self.conv_1.out_channels, out_channels=self.conv_1.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=True)
+
+        self.conv_3 = nn.Conv1d(in_channels=self.conv_2.out_channels, out_channels=self.conv_2.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=True)
+
+        self.c0 = nn.Sequential(
+                self.conv_0,
+                nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_0.out_channels,self.conv_0.out_channels,1,2,dtype=torch.float,bias=False)
+                nn.MaxPool1d(2,2)
+        )
+        self.c1 = nn.Sequential(
+                self.conv_1,
+                nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_1.out_channels,self.conv_1.out_channels,1,2,dtype=torch.float,bias=False)
+                nn.MaxPool1d(2,2)
+        )
+        self.c2 = nn.Sequential(
+                self.conv_2,
+                nn.LeakyReLU(0.1),
+                #nn.Conv1d(self.conv_2.out_channels,self.conv_2.out_channels,1,2,dtype=torch.float,bias=False)
+                nn.MaxPool1d(2,2)
+        )
+        self.c3 = nn.Sequential(
+                self.conv_3,
+                #nn.ReLU(),
+                nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,4,dtype=torch.float,bias=False)
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(256 * channels,18,dtype=torch.float),
+        )
+
+        self.m = nn.Parameter(torch.ones(18))
+
+    def forward(self,x):
+
+        x = self.c0(x)
+        #print(x.shape)
+        x = self.c1(x)
+        #print(x.shape)
+        x = self.c2(x)
+        #print(x.shape)
+        x = self.c3(x)
+        #print(x.shape)
+
+        z = x.flatten(1)
+
+        z1 = self.fc(z)
+        z = z1 * self.m 
+
+        return z
+
+
+
+class CNN5(nn.Module):
+
+    def __init__(self,channels = 16, kernel_size = 5):
+        super().__init__()
+
+        self.conv_0 = nn.Conv1d(in_channels=1, out_channels=channels,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_1 = nn.Conv1d(in_channels=self.conv_0.out_channels, out_channels=self.conv_0.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_2 = nn.Conv1d(in_channels=self.conv_1.out_channels, out_channels=self.conv_1.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_3 = nn.Conv1d(in_channels=self.conv_2.out_channels, out_channels=self.conv_2.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.conv_4 = nn.Conv1d(in_channels=self.conv_3.out_channels, out_channels=self.conv_3.out_channels * 2,
+                kernel_size=kernel_size, padding=int(kernel_size / 2),dtype=torch.float,bias=False)
+
+        self.c0 = nn.Sequential(
+                self.conv_0,
+                nn.LeakyReLU(0.1),
+                nn.Conv1d(self.conv_0.out_channels,self.conv_0.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c1 = nn.Sequential(
+                self.conv_1,
+                nn.LeakyReLU(0.1),
+                nn.Conv1d(self.conv_1.out_channels,self.conv_1.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c2 = nn.Sequential(
+                self.conv_2,
+                nn.LeakyReLU(0.1),
+                nn.Conv1d(self.conv_2.out_channels,self.conv_2.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c3 = nn.Sequential(
+                self.conv_3,
+                nn.LeakyReLU(0.1),
+                nn.Conv1d(self.conv_3.out_channels,self.conv_3.out_channels,1,2,dtype=torch.float,bias=False)
+        )
+        self.c4 = nn.Sequential(
+                self.conv_4,
+                #nn.ReLU(),
+                nn.Conv1d(self.conv_4.out_channels,self.conv_4.out_channels,1,4,dtype=torch.float,bias=False)
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(256 * channels,18,dtype=torch.float),
+        )
+        self.m = nn.Parameter(torch.ones(18))
+
+    def forward(self,x):
+
+        x = self.c0(x)
+        #print(x.shape)
+        x = self.c1(x)
+        #print(x.shape)
+        x = self.c2(x)
+        #print(x.shape)
+        x = self.c3(x)
+        x = self.c4(x)
+        #print(x.shape)
+
+        z = x.flatten(1)
+        #print(z.shape)
+
+        z1 = self.fc(z)
+        z = z1 * self.m
+
+        return z
+
